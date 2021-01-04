@@ -82,6 +82,9 @@ document.getElementById('book-form').addEventListener('submit', function(e) {
         // Add book to lsit
         ui.addBookToList(book);
 
+        // Show success
+        ui.showAlert('Book added successfully!', 'success');
+
         // Clear Fields
         ui.clearFields();
     }
