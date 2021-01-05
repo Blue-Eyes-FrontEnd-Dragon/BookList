@@ -58,7 +58,6 @@ class Store {
             books = [];
         } else {
             books = JSON.parse(localStorage.getItem('books'));
-            console.log('saved');
         }
         return books;
     }
@@ -78,8 +77,15 @@ class Store {
         localStorage.setItem('books', JSON.stringify(books));
     }
 
-    static removeBook() {
+    static removeBook(isbn) {
+        const books = Store.getBooks();
 
+        books.forEach((book, index) => {
+            if (book.isbn === isbn) {
+                books.splice(index, 1);
+            }
+        });
+        localStorage.setItem('books', JSON.stringify(books));
     }
 }
 
@@ -111,6 +117,7 @@ document.querySelector('#book-list').addEventListener('click', (e) => {
     const ui = new UI();
     
     ui.removeBookFromList(e.target);
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
     ui.showAlert('Book has been removed!', 'success');
 
     e.preventDefault();
