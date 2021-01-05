@@ -49,6 +49,42 @@ class UI {
 
 }
 
+class Store {
+
+    static getBooks() {
+        let books;
+
+        if (localStorage.getItem('books') === null) {
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+            console.log('saved');
+        }
+        return books;
+    }
+
+    static displayBooks() {
+        const books = Store.getBooks();
+        const ui = new UI();
+
+        books.forEach((book) => {
+            ui.addBookToList(book);
+        });
+    }
+
+    static addBook(book) {
+        const books = Store.getBooks();
+        books.push(book);
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static removeBook() {
+
+    }
+}
+
+document.addEventListener('DOMContentLoaded', Store.displayBooks());
+
 document.querySelector('#book-form').addEventListener('submit', (e) => {
 
     const title = document.querySelector('#title').value,
@@ -63,6 +99,7 @@ document.querySelector('#book-form').addEventListener('submit', (e) => {
         ui.showAlert('Please fill in all fields.', 'error');
     } else {
         ui.addBookToList(book);
+        Store.addBook(book);
         ui.showAlert('Book added successfully!', 'success');
         ui.clearFields();
     }
